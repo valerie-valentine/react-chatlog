@@ -3,6 +3,7 @@ import './App.css';
 import chatMessages from './data/messages.json';
 
 const App = () => {
+  console.log(chatMessages);
   return (
     <div id="App">
       <header>
