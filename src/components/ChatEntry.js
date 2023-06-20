@@ -16,9 +16,10 @@ const ChatEntry = ({ id, sender, body, timeStamp, liked, onUpdateLikes }) => {
   };
 
   const toggleHeart = liked ? '❤️' : '🤍';
-
+  const chatEntryClass = sender === 'Vladimir' ? 'local' : 'remote';
+  
   return (
-    <div className="chat-entry local">
+    <div className={`chat-entry ${chatEntryClass}`}>
       <h2 className="entry-name">{sender}</h2>
       <section className="entry-bubble">
         <p>{body}</p>
