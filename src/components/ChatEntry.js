@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import TimeStamp from './TimeStamp';
 
 
-const ChatEntry = ({ id, sender, body, timeStamp, liked, onUpdateLikes }) => {
+const ChatEntry = ({ id, sender, body, timeStamp, liked, 
+  onUpdateLikes, localColor, remoteColor }) => {
   const onButtonClick = () => {
     onUpdateLikes({
       id: id,
@@ -17,12 +18,14 @@ const ChatEntry = ({ id, sender, body, timeStamp, liked, onUpdateLikes }) => {
 
   const toggleHeart = liked ? '❤️' : '🤍';
   const chatEntryClass = sender === 'Vladimir' ? 'local' : 'remote';
+  const colorClass = chatEntryClass === 'local' ? localColor : remoteColor;
+  
   
   return (
     <div className={`chat-entry ${chatEntryClass}`}>
       <h2 className="entry-name">{sender}</h2>
       <section className="entry-bubble">
-        <p>{body}</p>
+        <p className={colorClass}>{body}</p>
         <p className="entry-time"><TimeStamp time={timeStamp}/></p>
         <button className="like" onClick={onButtonClick}>{toggleHeart}</button>
       </section>
