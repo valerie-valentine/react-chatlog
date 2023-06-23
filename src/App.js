@@ -1,24 +1,95 @@
 import React from 'react';
 import './App.css';
-import chatMessages from './data/messages.json';
+// import chatMessages from './data/messages.json';
 import ChatLog from './components/ChatLog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ColorChoice from './components/ColorChoice';
+import SendMessageForm from './components/SendMessage'; 
+import axios from 'axios';
+
+
+const kBaseUrl = 'http://localhost:5000';
+
+const getAllMessages = () => {
+  return axios
+    .get(`${kBaseUrl}/messages`)
+    .then((response) => {
+      return response.data.map(convertFromApi);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const updateLikesApi = (id, liked) => {
+  const endpoint = liked ? 'mark_liked' : 'mark_unliked';
+
+  return axios
+    .patch(`${kBaseUrl}/messages/${id}/${endpoint}`)
+    .then((response) => {
+      return convertFromApi(response.data.message);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+
+const convertFromApi = (apiMessage) => {
+  const {time_stamp: timeStamp, ...message} = apiMessage;
+  const newMessage = {timeStamp, ...message};
+  return newMessage;
+};
+
 
 const App = () => {
-  const [chatData, setChatData] = useState(chatMessages);
+  const [chatData, setChatData] = useState([]);
   const [localColor, setLocalColor] = useState('green');
   const [remoteColor, setRemoteColor] = useState('blue');
 
-  const onUpdateLikes = (entryToUpdate) => {
-    const entries = chatData.map((entry) => {
-      if (entry.id === entryToUpdate.id) {
-        return entryToUpdate;
-      }
-      return entry;
+  const fetchMessages = () => {
+    getAllMessages()
+    .then((messages) => {
+      setChatData(messages);
     });
-    setChatData(entries);
   };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  const onHandleSubmit = (data) => {
+    axios.post(`${kBaseUrl}/messages`, data)
+      .then((response) => {
+        setChatData((prevMessages) => [convertFromApi(response.data.message), ...prevMessages]);
+      })
+      .catch((error) => console.log(error));
+  };
+
+
+
+  const onUpdateLikes = (id, liked) => {
+    updateLikesApi(id, liked).then((updatedMessage) => {
+      setChatData((oldData) => {
+        return oldData.map((message) => {
+          if (message.id === id) {
+            return updatedMessage;
+          }
+          return message;
+          });
+        });
+      });
+    };
+
+  // const onUpdateLikes = (entryToUpdate) => {
+  //   const entries = chatData.map((entry) => {
+  //     if (entry.id === entryToUpdate.id) {
+  //       return entryToUpdate;
+  //     }
+  //     return entry;
+  //   });
+  //   setChatData(entries);
+  // };
   
   const calcTotalLikes = (Data) => {
     let totalLikes = 0;
@@ -30,22 +101,22 @@ const App = () => {
     return totalLikes;
   };
 
-const totalLikeCount = calcTotalLikes(chatData);
+  const totalLikeCount = calcTotalLikes(chatData);
 
-const updateLocalColor = (color) => {
-  setLocalColor(color);
-} 
+  const updateLocalColor = (color) => {
+    setLocalColor(color);
+  } 
 
-const updateRemoteColor = (color) => {
-  setRemoteColor(color);
-} 
+  const updateRemoteColor = (color) => {
+    setRemoteColor(color);
+  } 
 
 
   return (
     <div id="App">
       <header>
         <h1>Vivi's ChatLogs</h1>
-        <section class='colorSection'>
+        <section className='colorSection'>
           <div>
           <ColorChoice setColorCallback={updateLocalColor} />
           </div>
@@ -59,7 +130,7 @@ const updateRemoteColor = (color) => {
       </header>
       <main>
         <ChatLog entries={chatData} onUpdateLikes={onUpdateLikes} localColor={localColor} remoteColor={remoteColor}/>
-        {/* pass localcolor & remotecolor to chatentry & chatlog*/}
+        <SendMessageForm onHandleSubmit={onHandleSubmit}/>
       </main>
     </div>
   );

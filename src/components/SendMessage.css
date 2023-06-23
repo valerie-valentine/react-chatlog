@@ -1,0 +1,49 @@
+/* send message */
+.send-message {
+    position: fixed;
+    bottom: 0px;
+    right: 15vh;
+    width: 80%;
+    padding: 30px 40px;
+    background-color: #250f7f;
+    display: flex;
+    align-items: center;
+  }
+  .send-message > input {
+    height: 40px;
+    padding: 10px 10px;
+    border-radius: 5px 0 0 5px;
+    border: none;
+    flex-grow: 1;
+    background-color: white;
+    color: #1c2c4c;
+    font-size: 1rem;
+  }
+  .send-message > input:placeholder {
+    color: #ddd;
+  }
+  .send-message > :is(input, button):focus {
+    outline: none;
+    border-bottom: 1px solid #7cc5d9;
+  }
+  .send-message > button {
+    width: 70px;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: 0 5px 5px 0;
+    color: #242443;
+    border: 1px solid #7ea9e4;
+    background-color: #7ea9e4;
+    font-weight: 600;
+  }
+
+/* #sender {
+    width: 70px;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: 0 5px 5px 0;
+    color: #242443;
+    border: 1px solid #7ea9e4;
+    background-color: #7ea9e4;
+    font-weight: 600;
+  } */

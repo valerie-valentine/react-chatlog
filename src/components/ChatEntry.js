@@ -6,14 +6,17 @@ import TimeStamp from './TimeStamp';
 
 const ChatEntry = ({ id, sender, body, timeStamp, liked, 
   onUpdateLikes, localColor, remoteColor }) => {
-  const onButtonClick = () => {
-    onUpdateLikes({
-      id: id,
-      sender: sender,
-      body: body,
-      timeStamp: timeStamp,
-      liked: !liked,
-    });
+  // const onButtonClick = () => {
+  //   onUpdateLikes({
+  //     id: id,
+  //     sender: sender,
+  //     body: body,
+  //     timeStamp: timeStamp,
+  //     liked: !liked,
+  //   });
+  // };
+  const updateMessageWithId = () => {
+    onUpdateLikes(id, !liked);
   };
 
   const toggleHeart = liked ? '❤️' : '🤍';
@@ -27,7 +30,7 @@ const ChatEntry = ({ id, sender, body, timeStamp, liked,
       <section className="entry-bubble">
         <p className={colorClass}>{body}</p>
         <p className="entry-time"><TimeStamp time={timeStamp}/></p>
-        <button className="like" onClick={onButtonClick}>{toggleHeart}</button>
+        <button className="like" onClick={updateMessageWithId}>{toggleHeart}</button>
       </section>
     </div>
   );
