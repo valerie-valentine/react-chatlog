@@ -5,6 +5,7 @@ import ChatLog from './components/ChatLog';
 import { useState, useEffect } from 'react';
 import ColorChoice from './components/ColorChoice';
 import SendMessageForm from './components/SendMessage'; 
+import TimeStamp from './TimeStamp';
 import axios from 'axios';
 
 
@@ -130,7 +131,7 @@ const App = () => {
       </header>
       <main>
         <ChatLog entries={chatData} onUpdateLikes={onUpdateLikes} localColor={localColor} remoteColor={remoteColor}/>
-        <SendMessageForm onHandleSubmit={onHandleSubmit}/>
+        <SendMessageForm onHandleSubmit={onHandleSubmit} timeStamp={TimeStamp}/>
       </main>
     </div>
   );

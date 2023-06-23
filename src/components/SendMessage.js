@@ -3,37 +3,51 @@ import './SendMessage.css'
 import { useState } from 'react';
 
 const SendMessageForm = (props) => {
-  const [message, SetMessage] = useState('');
+  const [message, SetMessage] = useState({
+    'sender': 'Vladimir',
+    'body': '',
+  });
   
   const handleMessageChange = (event) => {
-    SetMessage(event.target.value);
-  }
+    const value = event.target.value;
+    const name = event.target.name;
+    
+    const newMessageData = {...message, [name]: value};
+    SetMessage(newMessageData);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const newMessage = {
-        sender: sender,
-        body: body,
+        sender: message.sender,
+        body: message.body,
     }
-    props.onHandleSubmit()
-    SetMessage('');
+    props.onHandleSubmit(newMessage)
+    SetMessage({
+      'sender': message.sender,
+      'body': '',
+    });
   };
 
   return (
     <form className="send-message" onSubmit={handleSubmit}>
-      <label htmlFor="messageInput" hidden>
+      <label htmlFor="body" hidden>
         Enter Message
       </label>
       <input
-        id="messageInput"
-        name="messageInput"
+        id="body"
+        name="body"
         type="text"
         className="form-input__input"
         placeholder="type message..."
         onChange={handleMessageChange}
-        value={message}
+        value={message.body}
       />
       <button type="submit">Send</button>
+      <select id="sender" name='sender' onChange={handleMessageChange}>
+        <option value='Vladimir'>Vladimir</option>
+        <option value='Estragon'>Estragon</option>
+      </select>
     </form>
   );
 };
