@@ -45,7 +45,7 @@ const updateRemoteColor = (color) => {
     <div id="App">
       <header>
         <h1>Vivi's ChatLogs</h1>
-        <section class='colorSection'>
+        <section className='colorSection'>
           <div>
           <ColorChoice setColorCallback={updateLocalColor} />
           </div>
