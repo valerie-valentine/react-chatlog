@@ -5,17 +5,17 @@ import ChatLog from './components/ChatLog';
 import { useState, useEffect } from 'react';
 import ColorChoice from './components/ColorChoice';
 import SendMessageForm from './components/SendMessage'; 
-import TimeStamp from './TimeStamp';
+import TimeStamp from './components/TimeStamp';
 import axios from 'axios';
 
 
 const kBaseUrl = 'http://localhost:5000';
 
-const getAllMessages = () => {
+const getAllMessages = (setMessages) => {
   return axios
     .get(`${kBaseUrl}/messages`)
     .then((response) => {
-      return response.data.map(convertFromApi);
+      setMessages(response.data.map(convertFromApi));
     })
     .catch((error) => {
       console.log(error);
@@ -47,13 +47,12 @@ const App = () => {
   const [chatData, setChatData] = useState([]);
   const [localColor, setLocalColor] = useState('green');
   const [remoteColor, setRemoteColor] = useState('blue');
+  
 
   const fetchMessages = () => {
-    getAllMessages()
-    .then((messages) => {
-      setChatData(messages);
-    });
+    getAllMessages(setChatData)
   };
+  console.log(chatData);
 
   useEffect(() => {
     fetchMessages();
@@ -131,7 +130,7 @@ const App = () => {
       </header>
       <main>
         <ChatLog entries={chatData} onUpdateLikes={onUpdateLikes} localColor={localColor} remoteColor={remoteColor}/>
-        <SendMessageForm onHandleSubmit={onHandleSubmit} timeStamp={TimeStamp}/>
+        <SendMessageForm onHandleSubmit={onHandleSubmit}/>
       </main>
     </div>
   );
